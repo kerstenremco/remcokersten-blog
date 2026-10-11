@@ -3,7 +3,6 @@ title: Building a Simple SOC/SIEM at Home Using Open Source Tools
 description: "How I Built a Home SOC Using Wazuh, MISP, Cortex & Shuffle – Open Source"
 heroImage: socsiemwazuh.png
 pubDate: 2025-06-09T22:00:00.000Z
-updatedDate: 2025-06-09T22:00:00.000Z
 tags:
   - Security
 seo_keywords: >-

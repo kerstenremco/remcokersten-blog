@@ -12,33 +12,43 @@ seo_keywords: "CA server, step-ca, Docker, FortiGate SSL, Network Security"
 
 To make my home network safer, I added a FortiGate between my router and my home network. The FortiGate comes with a self-signed certificate for the webinterface, but I want more protection because I don’t trust my cat. So, I’m going to create my own certificate authority (CA) using [step-ca](https://github.com/smallstep/certificates). This way, I can manage and revoke certificates if needed.
 
-![dewdew](cat-fortigate.png)
+![](cat-fortigate.png)
 
 ## Step 1: Installing step-ca
 
 First, deploy step-ca as a Docker container with Portainer (which is a tool to manage Docker containers), but you can also do this directly using Docker or on different operating systems without using Docker.
 
-- First set up a DNS entry pointing to the step-ca server on your local DNS server.
-- Create a storage volume in Docker
-- Create a new container. Name the container whatever you like, use the image **smallstep/step-ca and m**ap **port 9000**![](step-ca-1.png)
-- Connect the volume created earlier.![](step-ca-2.png)
+First, create a container with image **smallstep/step-ca**. Make sure to map **port 9000**.
+![](step-ca-1.png)
 
-Set the following environment variables:\
-DOCKER*STEPCA_INIT_NAME: \_the name for your new CA server*\
-DOCKER*STEPCA_INIT_DNS_NAMES: \_FQDN for your new CA server*\
-DOCKER*STEPCA_INIT_REMOTE_MANAGEMENT: \_true*\
+Connect a volume and map it to **/home/step** in the container. This is where the CA will store its data.
+![](step-ca-2.png)
+
+Set the following environment variables:
+
+- `DOCKER_STEPCA_INIT_NAME`: the name for your new CA server
+- `DOCKER_STEPCA_INIT_DNS_NAMES`: FQDN for your new CA server
+- `DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT`: true
+
 ![](step-ca-3.png)
 
-- Deploy the container.
-- Save the administrative **username**, **password**, and **root fingerprint** from the container logs in a secure place.\
-  ![](step-ca-4.png)
-- Check if the server is running by going to `https://<step-ca-domain>:9000/health`
+Deploy the container and save the administrative username, password, and root fingerprint from the container logs in a secure place. Check if the server is running by going to `https://<step-ca-domain>:9000/health`.
+![](step-ca-4.png)
 
 ## Step 2: Installing step-cli
 
-- Next, make sure you have [step-cli installed](https://smallstep.com/docs/step-cli/installation/) on your workstation.
-  On MacOS, simply install it thought brew: `brew install step`
-- Initialize step-cli by running `step ca bootstrap --ca-url https://<step-ca-domain>:9000 --fingerprint <root fingerprint> --install`
+Next, make sure you have [step-cli installed](https://smallstep.com/docs/step-cli/installation/) on your workstation.
+On MacOS, simply install it thought brew:
+
+```bash
+brew install step
+```
+
+Initialize step-cli by running
+
+```bash
+step ca bootstrap --ca-url https://<step-ca-domain>:9000 --fingerprint <root fingerprint> --install
+```
 
 _Notice the step cli also installs the root certificate on our system, so the CA is trusted by our OS._
 
@@ -50,7 +60,7 @@ Installing the root certificate in the system truststore... Password:
 done.
 ```
 
-- To generate a certificate and sign it, we need a one-time token. Generate a token with `step ca token <Subject Alternative Name>` and save is to a variable to use it in the next step.
+To generate a certificate and sign it, we need a one-time token. Generate a token with `step ca token <Subject Alternative Name>` and save is to a variable to use it in the next step.
 
 _In this example I’ll create a token for fortigate.masterball.local and save in the TOKEN variable.
 When you get promted for the provisioner key, this is the administrative password_
@@ -61,9 +71,11 @@ TOKEN = $(step ca token fortigate.masterball.local)
 Please enter the password to decrypt the provisioner key:
 ```
 
-- Now create a certificate and let step-ca sign it.
-  The command to do so is
-  `step ca certificate --token <created token> <SAN name> <filename for certificate> <filename for key>`
+Now create a certificate and let step-ca sign it. The command to do so is:
+
+```bash
+step ca certificate --token <created token> <SAN name> <filename for certificate> <filename for key>
+```
 
 _In this step I’ll create a certificate for fortigate.masterball.local and let the CA sign it by providing my generated token._
 
@@ -74,17 +86,26 @@ _In this step I’ll create a certificate for fortigate.masterball.local and let
 ✔ Private Key: fortigate.key
 ```
 
-- Your certificate and key are now stored in your working directory. Keep them safe!
+Your certificate and key are now stored in your working directory. Keep them safe!
 
 ## Step 3: Add the certificate to FortiGate
 
-- The certificate file contains two certificates: the certificate for the FortiGate itself, and the intermediate certificate. We need to grap the intermediate certificate and import in before importing the FortiGate certificate.
-  Open the **fortigate.crt** file and cut the last block into a separate file. Call this file something like **intermediate.crt**\
-  ![](step-ca-5.png)
-- Log in to your FortiGate and install the root (stored in the .step folder in your home folder) and intermediate certificate under **System** -> **Certificates** -> **Import** -> **CA certificate**![](step-ca-6.png)
-- Install the generated certificate for fortigate under **System** -> **Certificates** -> **Import** -> **Certificate** -> **Import Certificate**![](step-ca-7.png)
-- Under System -> Settings bind the HTTPS server certificate with the imported certificate![](step-ca-8.png)
-- Now, when navigating to the FortiGate web interface, the connection is secure with the certificate hierarchy we created.![](step-ca-9.png)
+The certificate file contains two certificates: the certificate for the FortiGate itself, and the intermediate certificate. We need to grap the intermediate certificate and import in before importing the FortiGate certificate.
+
+Open the **fortigate.crt** file and cut the last block into a separate file. Call this file something like **intermediate.crt**\
+![](step-ca-5.png)
+
+Log in to your FortiGate and install the root (stored in the .step folder in your home folder) and intermediate certificate under **System** -> **Certificates** -> **Import** -> **CA certificate**
+![](step-ca-6.png)
+
+Install the generated certificate for fortigate under **System** -> **Certificates** -> **Import** -> **Certificate** -> **Import Certificate**
+![](step-ca-7.png)
+
+Under System -> Settings bind the HTTPS server certificate with the imported certificate
+![](step-ca-8.png)
+
+Now, when navigating to the FortiGate web interface, the connection is secure with the certificate hierarchy we created.
+![](step-ca-9.png)
 
 ## Conclusion
 

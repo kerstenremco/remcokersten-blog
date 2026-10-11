@@ -17,8 +17,6 @@ Recently, I was setting up a new Nginx reverse proxy on a hardened RHEL9 server.
 
 ## Troubleshooting Steps
 
-- Check the Nginx error logs
-
 Start by inspecting the error logs to understand why Nginx is failing. Use the following command:
 
 ```shell
@@ -31,8 +29,6 @@ In my case, this was the error message:
 2024/11/16 10: 31: 11[crit] 155243#155243: * 24 connect() to 10.33.33.33: 30080 failed(13: Permission denied) while connecting to upstream, client: 10.59.1.10, server: xxx, request: "GET / HTTP/2.0", upstream: "http://10.33.33.33:30080/", host: "xxx"
 
 ```
-
-- Check if SELinux is blocking the request
 
 The error mentions "permission denied," which could indicate that SELinux is blocking the connection. To confirm, use the following command:
 
@@ -59,8 +55,6 @@ type=AVC msg=audit(1731771071.154:1804): avc:  denied  { name_connect } for  pid
 	Allow access by executing:
 	# setsebool -P nis_enabled 1
 ```
-
-- Apply the suggested SELinux changes
 
 Based on the output, execute the appropriate command(s) to allow Nginx to make network connections:
 
