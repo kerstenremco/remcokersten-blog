@@ -1,0 +1,43 @@
+---
+
+---
+
+<div class="inline-flex items-center gap-2">
+  <i class="ri-moon-fill text-amber-600"></i>
+  <input type="checkbox" class="toggle" id="theme-toggle" checked />
+</div>
+
+<script>
+  const htmlElement = document.documentElement;
+  const themeToggle = document.getElementById("theme-toggle") as HTMLInputElement | null;
+
+  function setTheme(isDarkMode: boolean) {
+    htmlElement.setAttribute("data-theme", isDarkMode ? "dark" : "cupcake");
+  }
+
+  function saveThemePreference(isDarkMode: boolean) {
+    localStorage.setItem("theme", isDarkMode ? "dark" : "cupcake");
+  }
+
+  function handleThemeChange(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const isDarkMode = target.checked;
+    setTheme(isDarkMode);
+    saveThemePreference(isDarkMode);
+  }
+
+  function loadThemePreference() {
+    if (!themeToggle) return;
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "cupcake") {
+      setTheme(false);
+      themeToggle.checked = false;
+    }
+  }
+
+  // Add listener
+  document.addEventListener("DOMContentLoaded", () => {
+    loadThemePreference();
+    themeToggle?.addEventListener("change", handleThemeChange);
+  });
+</script>

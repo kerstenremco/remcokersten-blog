@@ -1,0 +1,53 @@
+---
+enum TagColor {
+  PRIMARY = "badge-primary",
+  SECONDARY = "badge-secondary",
+  ACCENT = "badge-accent",
+  INFO = "badge-info",
+  SUCCESS = "badge-success",
+  WARNING = "badge-warning",
+  ERROR = "badge-error",
+}
+
+interface Tag {
+  name: string;
+  color: TagColor;
+  fontIcon?: string; // devicon or remixicon class name
+}
+
+const tags: Tag[] = [
+  { name: "AI", color: TagColor.INFO, fontIcon: "ri-robot-2-fill" },
+  { name: "AWS", color: TagColor.WARNING, fontIcon: "devicon-amazonwebservices-plain-wordmark" },
+  { name: "Cloud", color: TagColor.PRIMARY, fontIcon: "ri-cloud-fill" },
+  { name: "Coding", color: TagColor.PRIMARY, fontIcon: "ri-code-s-slash-line" },
+  { name: "Docker", color: TagColor.INFO, fontIcon: "devicon-docker-plain" },
+  { name: "Flutter", color: TagColor.PRIMARY, fontIcon: "devicon-flutter-plain" },
+  { name: "Networking", color: TagColor.ACCENT, fontIcon: "ri-wifi-fill" },
+  { name: "NodeJS", color: TagColor.SUCCESS, fontIcon: "devicon-nodejs-plain" },
+  { name: "Python", color: TagColor.WARNING, fontIcon: "devicon-python-plain" },
+  { name: "React", color: TagColor.INFO, fontIcon: "devicon-react-original" },
+  { name: "Linux", color: TagColor.WARNING, fontIcon: "devicon-linux-plain" },
+  { name: "Security", color: TagColor.ERROR, fontIcon: "ri-lock-password-fill" },
+  { name: "Swift", color: TagColor.SECONDARY, fontIcon: "devicon-swift-plain" },
+];
+
+const getTag = (tagName: string): Tag => {
+  const defaultTag: Tag = { name: tagName, color: TagColor.ACCENT };
+  const foundTag = tags.find((tag) => tag.name === tagName);
+  if (!foundTag) {
+    console.warn(`Tag "${tagName}" not found. Using default tag.`);
+  }
+  return foundTag ?? defaultTag;
+};
+
+interface Props {
+  tagName: string;
+}
+
+const { name, color, fontIcon } = getTag(Astro.props.tagName);
+---
+
+<div class=`badge badge-soft ${color} gap-2`>
+  {fontIcon && <i class={fontIcon} />}
+  {name}
+</div>

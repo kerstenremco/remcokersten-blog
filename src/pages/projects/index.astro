@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import ItemsList from "../../components/ItemsList/ItemsList.astro";
+import Base from "../../layouts/Base.astro";
+
+const posts = (await getCollection("projects")).sort((a, b) => b.data.order - a.data.order);
+const items = posts.map((post) => ({
+  title: post.data.title,
+  text: post.data.description,
+  image: post.data.heroImage.src,
+  link: `/projects/${post.id}`,
+  tags: post.data.tags,
+}));
+---
+
+<Base title={`${SITE_TITLE} - Projects`} description={SITE_DESCRIPTION} mainClass="w-11/12 lg:w-3/4 mx-auto min-h-screen">
+  <ItemsList items={items} />
+</Base>

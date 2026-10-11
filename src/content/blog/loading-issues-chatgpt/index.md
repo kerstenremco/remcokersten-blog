@@ -1,0 +1,31 @@
+---
+title: Loading issues ChatGPT
+description: Encountering problems loading ChatGPT? Check if the CDN of ChatGPT get's blocked and how to whitelist it
+heroImage: chatgpt.png
+pubDate: 2023-09-22T22:00:00.000Z
+updatedDate: 2023-09-22T22:00:00.000Z
+tags:
+  - AI
+seo_keywords: "ChatGPT loading issues, Whitelisting domains for ChatGPT, Troubleshooting ChatGPT access, Unblock ChatGPT"
+archive: true
+---
+
+Have you recently been experiencing problems loading ChatGPT? Do you only see the messages “_free research preview. chatgpt may produce inaccurate information about people, places, or facts. chatgpt august 3 version_” or “_ChatGPT Draft an email…_”? It is possible that your firewall or DNS provider is partially blocking ChatGPT.
+
+![](loading-issues-chatgpt-1.png)
+
+## Checking if ChatGPT is Being Blocked
+
+To check whether ChatGPT is partially blocked, you can open the development tools in your browser (F12) and go to the Network tab. If you see many error messages here, as in a provided screenshot, then ChatGPT is indeed being blocked.
+
+This problem can arise because some components of ChatGPT are delivered via a CDN provider, which recently got a new domain: _cdn.oaistatic.com_. New domains are often blocked by firewalls and premium DNS services like NextDNS for the first 30 days to prevent abuse.
+
+![](loading-issues-chatgpt-2.png)
+
+## Making ChatGPT Accessible Again
+
+To make ChatGPT accessible again, you need to ensure that the domain _cdn.oaistatic.com_ is whitelisted. This depends on what is blocking ChatGPT; it could be a firewall, virus scanner, ad blocker, etc. If you are working for an organization, it is advisable to contact the IT department. They will likely need to make an exception in the firewall.
+
+### Instructions for NextDNS Users
+
+Many people use NextDNS as their DNS provider. If you belong to this group, you can make an exception by logging into the NextDNS portal and adding **cdn.oaistatic.com to** the list of exceptions.

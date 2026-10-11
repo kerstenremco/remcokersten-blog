@@ -1,0 +1,32 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import ProjectLink from "../../components/ProjectLink.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: project,
+  }));
+}
+type Props = CollectionEntry<"projects">;
+
+const project = Astro.props;
+const { title, description, heroImage, links } = project.data;
+const { Content } = await render(project);
+---
+
+<Base title={title} description={description} image={heroImage}>
+  <article class="py-8 px-12 mx-auto prose max-w-3xl">
+    <h1 class="text-3xl font-bold text-center">{title}</h1>
+    <Image src={heroImage} class="rounded-2xl mx-auto hero-image" alt={title} height={200} />
+    <div>
+      <div class="flex gap-2 justify-center">
+        {links.map((link: string) => <ProjectLink projectLink={link} />)}
+      </div>
+    </div>
+    <Content />
+  </article>
+</Base>

@@ -1,0 +1,54 @@
+---
+title: Export Trello cards to Microsoft Planner
+description: Migrating from Trello to Microsoft Planner? With this step-by-step guide you can easily import your Trello cards into Microsoft Planner.
+heroImage: trellopowerautomate.png
+pubDate: 2024-08-09T22:00:00.000Z
+updatedDate: 2024-08-09T22:00:00.000Z
+tags:
+  - Cloud
+seo_keywords: "Trello, Microsoft Planner, Planner, Teams Planner, Migrate, Office365, Export Trello, Import Planner, Power Automate"
+archive: true
+---
+
+Recently, it was decided to start using Microsoft Planner. A logical choice, as we are increasingly using Office365, and Microsoft Planner integrates well with other products like Teams. However, we had already been using Trello for over a year, and the number of cards had become countless. Therefore, manually transferring these cards was not an option, but unfortunately, there is no easy way to export cards from Trello and import them into Planner. After some clicking around in Teams, I came across Power Automate and saw a connector to Microsoft Planner. And you guessed it: I was able to build a flow to import the Trello cards.
+
+Below, I describe the steps I followed to migrate our cards. But every organization uses Trello differently, so adjust the flow to your own situation!
+
+## Step 1: Export Trello Data
+
+- First, log in to your Trello account and create a JSON export of your data. This can be done without a premium plan!![](export.png)
+
+## Step 2: Transform Data
+
+- You'll receive a bulk of JSON data, most of those data is not relevant for Microsoft Planner. Load the exported JSON data into an editor tool like [jsoneditoronline.org](https://jsoneditoronline.org "jsoneditoronline.org"). Modify the file so that you're left with only an objects containing relevant data. I chose to keep only the fields title, description, and idList.
+
+![](json.png)
+
+## Step 3: Create a Power Automate Flow
+
+- Now comes the fun part: Power Automate! Open Power Automate in your Teams channel or go to [make.powerautomate.com](https://make.powerautomate.com "make.powerautomate.com").
+  Next, create the following Flow. I'll explain what happens in each element.
+
+![](flow.png)
+
+- **Manually trigger a flow**: This option indicates that the flow must be started manually.
+- **JSON object Trello**: In this element, I define a variable named "json" with the filtered data from the previous step.\
+  ![](SCR-20240810-lzrg.png)
+- **listIds**: The cards in Trello were in so-called lists. These lists have an ID (which you can find in the exported JSON data). Microsoft Planner also has lists with IDs, so create the lists in Planner beforehand! In this variable, I map the Trello list IDs to the Microsoft Planner List IDs.\
+  ![](SCR-20240810-maol.png)
+- **Loop over Trello items**: A loop function that iterates over each object in the JSON variable.\
+  ![](SCR-20240810-mbgo.png)
+- **Create task**: This function creates a task for each object in the loop. The fields in the JSON object are filled in the corresponding fields.
+
+  > [!NOTE]
+  > Note how I define the BuckedID! I get it from the list mapping created in the previous steps!
+
+  ![](SCR-20240810-mhfq.png)
+
+- **Check if description**: Unfortunately, the Create task function cannot fill in the description. Therefore, I check if the current card contains the "desc" field. If so, I update the card that was created in the previous step with the description.\
+  ![](SCR-20240810-mfct.png)\
+  ![](SCR-20240810-mchq.png)
+
+## Conclusion
+
+And that's it! Now run your flow, and the cards will be neatly transferred to your Microsoft Planner environment.

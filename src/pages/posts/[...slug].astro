@@ -1,0 +1,31 @@
+---
+import { Image } from "astro:assets";
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import BlogPostDateInfo from "../../components/BlogPostDateInfo.astro";
+import BlogPostArchived from "../../components/BlogPostArchived.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
+}
+type Props = CollectionEntry<"blog">;
+
+const post = Astro.props;
+const { title, description, pubDate, heroImage, updatedDate, archive } = post.data;
+
+const { Content } = await render(post);
+---
+
+<Base title={title} description={description} image={heroImage}>
+  <article class="py-8 px-12 mx-auto prose max-w-3xl">
+    <h1 class="text-3xl font-bold text-center">{title}</h1>
+    <BlogPostDateInfo pubDate={pubDate} updatedDate={updatedDate} />
+    <Image src={heroImage} class="rounded-2xl mx-auto hero-image" alt={title} height={200} />
+    {archive && <BlogPostArchived />}
+    <Content />
+  </article>
+</Base>

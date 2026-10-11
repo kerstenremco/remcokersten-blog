@@ -1,0 +1,44 @@
+---
+interface Props {
+  projectLink: string;
+}
+
+interface LinkType {
+  icon: string;
+  label: string;
+}
+
+const { projectLink } = Astro.props as Props;
+
+const [type, ...rest] = projectLink.split("/");
+const link = rest.join("/");
+
+const linkTypes: Record<string, LinkType> = {
+  appstore: {
+    icon: "devicon-apple-original",
+    label: "Download on App Store",
+  },
+  github: {
+    icon: "devicon-github-original",
+    label: "View on GitHub",
+  },
+  website: {
+    icon: "devicon-chrome-plain",
+    label: "View Website",
+  },
+};
+
+const linkType = linkTypes[type];
+if (!linkType) {
+  throw new Error(`Unknown link type: ${type}`);
+}
+
+const { icon, label } = linkType;
+---
+
+<a href={link} target="_blank">
+  <button class="btn btn-active text-white">
+    <i class={icon}></i>
+    {label}
+  </button>
+</a>

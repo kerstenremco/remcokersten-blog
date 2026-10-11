@@ -1,0 +1,33 @@
+---
+import Tag from "../Tag.astro";
+import type { Item } from "./Item";
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props as Props;
+---
+
+<ul class="list rounded-box shadow-md mt-10">
+  {
+    items.map((item) => (
+      <a href={item.link}>
+        <li class="list-row md:pr-40 hover:bg-base-200">
+          <div>
+            <img class="h-20 rounded-box" alt="Tailwind CSS list item" src={item.image} />
+          </div>
+          <div class="flex flex-col max-lg:list-col-wrap">
+            <div class="text-base">{item.title}</div>
+            <div class="opacity-60 flex-1 text-sm">{item.text}</div>
+            <div class="flex gap-1 mt-2">
+              {item.tags.map((tag) => (
+                <Tag tagName={tag} />
+              ))}
+            </div>
+          </div>
+        </li>
+      </a>
+    ))
+  }
+</ul>
