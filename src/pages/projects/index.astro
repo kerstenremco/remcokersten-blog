@@ -8,7 +8,7 @@ const posts = (await getCollection("projects")).sort((a, b) => b.data.order - a.
 const items = posts.map((post) => ({
   title: post.data.title,
   text: post.data.description,
-  image: post.data.heroImage.src,
+  image: post.data.heroImage,
   link: `/projects/${post.id}`,
   tags: post.data.tags,
 }));

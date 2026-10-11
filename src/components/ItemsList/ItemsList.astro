@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 import Tag from "../Tag.astro";
 import type { Item } from "./Item";
 
@@ -9,13 +11,13 @@ interface Props {
 const { items } = Astro.props as Props;
 ---
 
-<ul class="list rounded-box shadow-md mt-10">
+<ul class="list mt-10">
   {
     items.map((item) => (
       <a href={item.link}>
         <li class="list-row md:pr-40 hover:bg-base-200">
           <div>
-            <img class="h-20 rounded-box" alt="Tailwind CSS list item" src={item.image} />
+            <Image src={item.image} alt={item.title} width={200} class="rounded" />
           </div>
           <div class="flex flex-col max-lg:list-col-wrap">
             <div class="text-base">{item.title}</div>
