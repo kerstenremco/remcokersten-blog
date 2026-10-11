@@ -20,7 +20,7 @@ const { items } = Astro.props as Props;
           <div class="flex flex-col max-lg:list-col-wrap">
             <div class="text-base">{item.title}</div>
             <div class="opacity-60 flex-1 text-sm">{item.text}</div>
-            <div class="flex gap-1 mt-2">
+            <div class="flex gap-1 mt-2 flex-wrap">
               {item.tags.map((tag) => (
                 <Tag tagName={tag} />
               ))}
