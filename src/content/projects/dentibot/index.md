@@ -8,7 +8,7 @@ tags:
   - AWS
 links:
   - "github/https://github.com/kerstenremco/bedrock-tandarts"
-order: 30
+order: 50
 ---
 
 In recent months, the quality and use of AI have grown quick. At first, I found this development a bit intimidating because I felt like I had no control over how LLMs generate responses. However, my view has completely changed.
@@ -22,10 +22,6 @@ Instead of training a completely new model, RAG offers a great solution. With RA
 ## Dentibot
 
 To put this technique into practice, I created a chatbot experiment called Dentibot. This chatbot is designed to explain dental invoices and answer related questions. The information Dentibot uses are based on the official tariff codes and explanations for 2024, stored in a vector database (Pinecone). Thanks to this setup, Dentibot can retrieve the relevant information from the vector database when a user asks a question. The LLM model I used is [Anthropic Claude](https://www.anthropic.com/claude), which is great at generating answers in a specific format. This is important because the answers sometimes need further processing in the backend.
-
-You can check out the project at [dentibot.remcokersten.nl](https://dentibot.remcokersten.nl "dentibot.remcokersten.nl").
-
-Or checkout the Git Repo at [github.com/kerstenremco/bedrock-tandarts](https://github.com/kerstenremco/bedrock-tandarts)
 
 > [!NOTE]
 > Please note that this is a Dutch-language chatbot.
@@ -67,5 +63,3 @@ This project runs entirely on serverless services provided by AWS. The following
 ## Conclusion
 
 This project shows how combining LLMs with modern techniques like RAG allows us to "easy" create context-specific tasks without needing to train a completely new model. Also, AWS's serverless services make it easy to quickly launch such projects without requiring extensive infrastructure.
-
-You can check out the project at [dentibot.remcokersten.nl](https://dentibot.remcokersten.nl "dentibot.remcokersten.nl")

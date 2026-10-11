@@ -3,7 +3,7 @@ title: What are Github Codespaces
 description: >-
   Codespaces, your own development environment in the cloud! Let's take a look
   at Codespaces and how to create them
-heroImage: codespaces.png
+heroImage: github_codespaces.jpeg
 pubDate: 2023-05-10T22:00:00.000Z
 updatedDate: 2023-05-19T22:00:00.000Z
 tags:
