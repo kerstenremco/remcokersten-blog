@@ -16,18 +16,18 @@ Below, I describe the steps I followed to migrate our cards. But every organizat
 
 ## Step 1: Export Trello Data
 
-- First, log in to your Trello account and create a JSON export of your data. This can be done without a premium plan!![](export.png)
+First, log in to your Trello account and create a JSON export of your data. This can be done without a premium plan!![](export.png)
 
 ## Step 2: Transform Data
 
-- You'll receive a bulk of JSON data, most of those data is not relevant for Microsoft Planner. Load the exported JSON data into an editor tool like [jsoneditoronline.org](https://jsoneditoronline.org "jsoneditoronline.org"). Modify the file so that you're left with only an objects containing relevant data. I chose to keep only the fields title, description, and idList.
+You'll receive a bulk of JSON data, most of those data is not relevant for Microsoft Planner. Load the exported JSON data into an editor tool like [jsoneditoronline.org](https://jsoneditoronline.org "jsoneditoronline.org"). Modify the file so that you're left with only an objects containing relevant data. I chose to keep only the fields title, description, and idList.
 
 ![](json.png)
 
 ## Step 3: Create a Power Automate Flow
 
-- Now comes the fun part: Power Automate! Open Power Automate in your Teams channel or go to [make.powerautomate.com](https://make.powerautomate.com "make.powerautomate.com").
-  Next, create the following Flow. I'll explain what happens in each element.
+Now comes the fun part: Power Automate! Open Power Automate in your Teams channel or go to [make.powerautomate.com](https://make.powerautomate.com "make.powerautomate.com").
+Next, create the following Flow. I'll explain what happens in each element.
 
 ![](flow.png)
 

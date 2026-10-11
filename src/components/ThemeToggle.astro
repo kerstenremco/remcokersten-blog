@@ -12,11 +12,11 @@
   const themeToggle = document.getElementById("theme-toggle") as HTMLInputElement | null;
 
   function setTheme(isDarkMode: boolean) {
-    htmlElement.setAttribute("data-theme", isDarkMode ? "dark" : "cupcake");
+    htmlElement.setAttribute("data-theme", isDarkMode ? "dark" : "light");
   }
 
   function saveThemePreference(isDarkMode: boolean) {
-    localStorage.setItem("theme", isDarkMode ? "dark" : "cupcake");
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }
 
   function handleThemeChange(e: Event) {
@@ -29,7 +29,7 @@
   function loadThemePreference() {
     if (!themeToggle) return;
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "cupcake") {
+    if (savedTheme === "light") {
       setTheme(false);
       themeToggle.checked = false;
     }

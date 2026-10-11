@@ -5,7 +5,6 @@ description: >-
   it into the new volume using Busybox.
 heroImage: longhornkubernetes.png
 pubDate: 2024-09-14T22:00:00.000Z
-updatedDate: 2024-09-14T22:00:00.000Z
 tags:
   - Docker
 seoKeywords: >-
@@ -21,29 +20,23 @@ In this guide, I’ll walk you through the process of exporting data from an exi
 
 First, we need to export the data from the existing container.
 
-- Open a Shell in the Running Container\
-  Use `docker exec` to open a shell in the container you want to export data from:
+Open a Shell in the container you want to export data from:
 
 ```shell
 sudo docker exec -it gitea /bin/sh
 ```
 
-- Archive (Tar) the Data\
-  Navigate to the directory where your data is stored and compress it into a tarball for easy copying:
+Navigate to the directory where your data is stored and compress it into a tarball for easy copying:
 
 ```shell
 cd /data/
-ls
-git           gitea         ssh
 tar -czf gitea.tar.gz .
 ```
 
-- Copy the Tarball from the Container to your host\
-  Exit the shell and use `docker cp` to copy the tarball to your host:
+Exit the shell and use `docker cp` to copy the tarball to your host
 
 ```shell
 docker cp gitea:/data/gitea.tar.gz .
-Successfully copied 10.3MB to /home/remco/.
 ```
 
 Now that we have exported the data, let's move on to creating the Longhorn volume where we will import this data.
@@ -52,13 +45,13 @@ Now that we have exported the data, let's move on to creating the Longhorn volum
 
 There are different ways to create a volume in Longhorn. For simplicity, we'll use the Longhorn UI to create a Persistent Volume Claim (PVC).
 
-- Create a Persistent Volume Claim (PVC)
+Create a Persistent Volume Claim (PVC)
 
 ![](create-volume-longhorn.png)
 
 ![](create-pvc-longhorn.png)
 
-- After creating the PVC via the Longhorn UI, you can verify its existence in the desired Kubernetes namespace:
+After creating the PVC via the Longhorn UI, you can verify its existence in the desired Kubernetes namespace:
 
 ```shell
 kubectl get pvc -n gitea
@@ -66,14 +59,13 @@ NAME         STATUS   VOLUME       CAPACITY   ACCESS MODES   STORAGECLASS      A
 gitea-data   Bound    gitea-data   10Gi       RWO            longhorn-static   22s
 ```
 
-- Once the PVC is bound, you're ready to import the data into the Longhorn volume.
+Once the PVC is bound, you're ready to import the data into the Longhorn volume.
 
 ## Step 3: Create a Pod to Import the Data
 
 To copy the data to the Longhorn volume, we’ll need a pod that can mount the volume. For this example, we’ll use a simple [busybox](https://hub.docker.com/_/busybox "busybox") pod, but you can use any container you prefer.
 
-- Create a Busybox Pod\
-  Below is a YAML file to create a busybox pod that will sleep for an hour, giving us time to copy and extract the data.
+Below is a YAML file to create a busybox pod that will sleep for an hour, giving us time to copy and extract the data.
 
 ```yaml
 ---
@@ -99,7 +91,7 @@ spec:
         claimName: gitea-data
 ```
 
-- Apply the YAML file using kubectl:
+Apply the YAML file using kubectl:
 
 ```shell
 kubectl apply -f busybox.yaml -n gitea
@@ -107,7 +99,7 @@ kubectl apply -f busybox.yaml -n gitea
 
 ### Verify the Pod is Running
 
-- Check that the pod is up and running with the following command:
+Check that the pod is up and running with the following command:
 
 ```shell
 $ kubectl get pods -n gitea
@@ -120,13 +112,13 @@ Now that the pod is running, we can proceed with copying the data.
 
 ## Step 4: Copy the Tar File into the Pod
 
-- Use the `kubectl cp` command to copy the tar file into the **busybox** pod, specifically to the **/data** directory:
+Use the `kubectl cp` command to copy the tar file into the **busybox** pod, specifically to the **/data** directory:
 
 ```shell
 kubectl cp -n gitea ./gitea.tar.gz busybox:/data/
 ```
 
-- Open a shell in the busybox pod and extract the Tar File
+Open a shell in the busybox pod and extract the Tar File
 
 ```shell
 kubectl exec -n gitea --stdin --tty busybox -- /bin/sh
@@ -137,7 +129,7 @@ tar -xzf gitea.tar.gz
 
 ## Step 5: Clean Up
 
-- Once the data is successfully imported, delete the Tar file and delete the busybox pod to free up resources. If you used the provided YAML file, simply run:
+Once the data is successfully imported, delete the Tar file and delete the busybox pod to free up resources. If you used the provided YAML file, simply run:
 
 ```shell
 $ kubectl delete -f busybox.yaml -n gitea
