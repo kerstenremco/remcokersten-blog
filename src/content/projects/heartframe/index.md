@@ -7,7 +7,7 @@ tags:
   - Swift
 links:
   - "website/https://heartframe.remcokersten.nl"
-  - "appstore/https://apps.apple.com/nl/app/heartframe-relationship-days/id6746423559"
+  - "appstore/https://apps.apple.com/app/id6746423559"
 order: 40
 ---
 
