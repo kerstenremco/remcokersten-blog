@@ -7,8 +7,8 @@ tags:
   - Swift
   - Firebase
 links:
-  - "website/https://www.wiegaaterkoffiehalen.nl"
-  - "appstore/https://apps.apple.com/nl/app/wiegaaterkoffiehalen-nl/id6737775867"
+  - "website/https://sendanote.web.app/"
+  - "appstore/https://apps.apple.com/app/id6757368193"
 order: 90
 ---
 
